@@ -16,8 +16,8 @@
       register: backup_previous_files_check
       loop:
         - "metadata.yml"
-        - ".config.snar"
-        - ".pulp.snar"
+        - "config.snar"
+        - "pulp.snar"
       failed_when: false
 
     - name: Fail if previous backup is invalid
@@ -121,20 +121,20 @@
       ansible.builtin.include_tasks:
         file: database_dumps.yaml
 
-    - name: Copy .pulp.snar from previous backup
+    - name: Copy pulp.snar from previous backup
       ansible.builtin.copy:
-        src: "{{ backup_incremental }}/.pulp.snar"
-        dest: "{{ backup_dir_full }}/.pulp.snar"
+        src: "{{ backup_incremental }}/pulp.snar"
+        dest: "{{ backup_dir_full }}/pulp.snar"
         remote_src: true
         mode: '0644'
       when:
         - backup_incremental is defined and backup_incremental | length > 0
         - not skip_pulp_content | default(false)
 
-    - name: Fetch .config.snar from previous backup to controller
+    - name: Fetch config.snar from previous backup to controller
       ansible.builtin.fetch:
-        src: "{{ backup_incremental }}/.config.snar"
-        dest: "{{ obsah_state_path | dirname }}/.config.snar"
+        src: "{{ backup_incremental }}/config.snar"
+        dest: "{{ obsah_state_path | dirname }}/config.snar"
         flat: true
       when: backup_incremental is defined and backup_incremental | length > 0
 
@@ -142,7 +142,7 @@
       ansible.builtin.command:
         cmd: >
           tar -czf "{{ obsah_state_path | dirname }}/foremanctl-state.tar.gz"
-          --listed-incremental="{{ obsah_state_path | dirname }}/.config.snar"
+          --listed-incremental="{{ obsah_state_path | dirname }}/config.snar"
           -C "{{ obsah_state_path | dirname }}"
           "{{ obsah_state_path | basename }}"
       delegate_to: localhost
@@ -155,10 +155,10 @@
         dest: "{{ backup_dir_full }}/foremanctl-state.tar.gz"
         mode: '0644'
 
-    - name: Copy .config.snar to backup directory
+    - name: Copy config.snar to backup directory
       ansible.builtin.copy:
-        src: "{{ obsah_state_path | dirname }}/.config.snar"
-        dest: "{{ backup_dir_full }}/.config.snar"
+        src: "{{ obsah_state_path | dirname }}/config.snar"
+        dest: "{{ backup_dir_full }}/config.snar"
         mode: '0644'
 
     - name: Clean up foremanctl state files on controller
@@ -167,7 +167,7 @@
         state: absent
       loop:
         - "{{ obsah_state_path | dirname }}/foremanctl-state.tar.gz"
-        - "{{ obsah_state_path | dirname }}/.config.snar"
+        - "{{ obsah_state_path | dirname }}/config.snar"
       delegate_to: localhost
       become: false
 

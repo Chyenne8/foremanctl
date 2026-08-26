@@ -13,9 +13,9 @@
         state: directory
         mode: '0755'
 
-    - name: Check for .pulp.snar file (incremental backup indicator)
+    - name: Check for pulp.snar file (incremental backup indicator)
       ansible.builtin.stat:
-        path: "{{ restore_backup_dir }}/.pulp.snar"
+        path: "{{ restore_backup_dir }}/pulp.snar"
       register: restore_pulp_snar_check
 
     - name: Remove existing pulp media directory for full restore

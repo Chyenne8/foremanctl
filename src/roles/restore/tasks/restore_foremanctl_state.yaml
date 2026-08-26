@@ -1,7 +1,7 @@
 ---
-- name: Check for .config.snar file (incremental backup indicator)
+- name: Check for config.snar file (incremental backup indicator)
   ansible.builtin.stat:
-    path: "{{ restore_backup_dir }}/.config.snar"
+    path: "{{ restore_backup_dir }}/config.snar"
   register: restore_config_snar_check
 
 - name: Remove existing foremanctl state directory for full restore

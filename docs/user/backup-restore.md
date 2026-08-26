@@ -89,7 +89,7 @@ foremanctl backup /var/backup --base-backup /var/backup/foreman-backup-20260629T
 **How it works:**
 - The incremental backup contains only files changed since the previous backup
 - `.snar` snapshot files track which files were in the previous backup
-- Both `.config.snar` (foremanctl state) and `.pulp.snar` (Pulp content) are copied from the previous backup
+- Both `config.snar` (foremanctl state) and `pulp.snar` (Pulp content) are copied from the previous backup
 - Incremental backups are typically much smaller and faster than full backups
 
 **Typical backup strategy:**
